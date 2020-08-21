@@ -7,6 +7,15 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+typedef struct pos{
+    double xpos;
+    double ypos;
+}pos;
+typedef struct packetinfo{
+    int RSSI;
+    pos anthenaloc;
+}packetinfo;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
