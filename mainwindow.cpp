@@ -77,24 +77,3 @@ void MainWindow::paintEvent(QPaintEvent* event)
                 18,
                 18);
 }
-
-void MainWindow::on_xValue_valueChanged(int value)
-{
-    xValue = 240+value;
-
-    MainWindow::update();
-}
-
-void MainWindow::on_yValue_valueChanged(int value)
-{
-    yValue = 240+value;
-
-    MainWindow::update();
-}
-
-void MainWindow::on_boundValue_valueChanged(int value)
-{
-    boundValue = value*2;
-
-    MainWindow::update();
-}

@@ -22,12 +22,6 @@ private slots:
 
     void paintEvent(QPaintEvent* event);
 
-    void on_xValue_valueChanged(int value);
-
-    void on_yValue_valueChanged(int value);
-
-    void on_boundValue_valueChanged(int value);
-
 private:
     Ui::MainWindow *ui;
 };
