@@ -2,12 +2,12 @@
 #include "ui_mainwindow.h"
 #include "qpainter.h"
 
-#define MONITOR_ONE_X 42
-#define MONITOR_ONE_Y 90
-#define MONITOR_TWO_X 42
-#define MONITOR_TWO_Y 390
-#define MONITOR_THREE_X 438
-#define MONITOR_THREE_Y 240
+#define MONITOR_ONE_X 90
+#define MONITOR_ONE_Y 42
+#define MONITOR_TWO_X 390
+#define MONITOR_TWO_Y 42
+#define MONITOR_THREE_X 240
+#define MONITOR_THREE_Y 438
 
 char filename;
 char mac_add;
@@ -132,8 +132,8 @@ void MainWindow::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
 
-    xPosition = 490 - xValue;
-    yPosition = 10  + yValue;
+    xPosition = 10  + xValue;
+    yPosition = 490 - yValue;
 
     QPainter painter;
     painter.begin(this);
@@ -141,34 +141,34 @@ void MainWindow::paintEvent(QPaintEvent* event)
     painter.setPen(Qt::yellow);
     painter.setBrush(QBrush(Qt::yellow));
     painter.drawEllipse(
-                yPosition-boundValue/2,
                 xPosition-boundValue/2,
+                yPosition-boundValue/2,
                 boundValue,
                 boundValue);
 
     painter.setPen(Qt::red);
     painter.setBrush(QBrush(Qt::red));
     painter.drawEllipse(
-                yPosition-1,
                 xPosition-1,
+                yPosition-1,
                 2,
                 2);
 
     painter.setPen(Qt::blue);
     painter.setBrush(QBrush(Qt::blue));
     painter.drawEllipse(
-                10  +   MONITOR_ONE_Y   - 9,
-                490 -   MONITOR_ONE_X   - 9,
+                10  +   MONITOR_ONE_X   - 9,
+                490 -   MONITOR_ONE_Y   - 9,
                 18,
                 18);
     painter.drawEllipse(
-                10  +   MONITOR_TWO_Y   - 9,
-                490 -   MONITOR_TWO_X   - 9,
+                10  +   MONITOR_TWO_X   - 9,
+                490 -   MONITOR_TWO_Y   - 9,
                 18,
                 18);
     painter.drawEllipse(
-                10  +   MONITOR_THREE_Y - 9,
-                490 -   MONITOR_THREE_X - 9,
+                10  +   MONITOR_THREE_X   - 9,
+                490 -   MONITOR_THREE_Y   - 9,
                 18,
                 18);
 }
@@ -215,8 +215,8 @@ void MainWindow::on_enterButton_clicked()
     disC = CalculateDistance(pckt3, 2);
 
     struct pos resultLocation = CalculateLocation(disA, disB, disC, 2);
-    yValue=resultLocation.xPos*150+90;
-    xValue=resultLocation.yPos*150+42;
+    xValue=resultLocation.xPos*150+90;
+    yValue=resultLocation.yPos*150+42;
     int diff=abs(pckt2.anthenaLoction.xPos-pckt1.anthenaLoction.xPos);
     boundValue=CalculateRadius(disA, disB, disC, diff,resultLocation);
     MainWindow::update();
