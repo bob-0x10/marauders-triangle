@@ -78,8 +78,6 @@ private slots:
 
     int return_RSSI(char *filename, char* mac_add);
 
-
-
 private:
     Ui::MainWindow *ui;
 };

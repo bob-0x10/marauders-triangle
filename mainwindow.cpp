@@ -172,3 +172,8 @@ void MainWindow::paintEvent(QPaintEvent* event)
                 18,
                 18);
 }
+
+void MainWindow::on_enterButton_clicked()
+{
+    //main logic
+}
