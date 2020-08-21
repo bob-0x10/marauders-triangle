@@ -12,20 +12,22 @@
 #include <string.h>
 #include <stdlib.h>
 #include <wchar.h>
-
+#include <math.h>
+#define TX_POWER -82
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 typedef struct pos{
-    double xpos;
-    double ypos;
+    double xPos;
+    double yPos;
 }pos;
-typedef struct packetinfo{
+typedef struct packet_info{
     int RSSI;
-    pos anthenaloc;
-}packetinfo;
+    pos anthenaLoction;
+}packet_info;
+
 
 typedef struct radiotap_header {
         uint8_t        it_version;     /* set to 0 */
@@ -54,7 +56,11 @@ typedef struct ieee80211_header {
 }ieee80211_header;
 
 static void my_packet_handler( u_char *args, const struct pcap_pkthdr *header, const u_char *packet);
-
+double CalculateDistance(packet_info pinfo, int n);
+pos CalculateLocation(double disA, double disB, double disC, double disBetween);
+double DistanceBetween(pos p1, pos p2);
+double CalculateRadius(double disA, double disB, double disC, double disBetween,
+                       pos target_loc);
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
