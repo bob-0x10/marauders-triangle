@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include <QString>
 #include <stdio.h>
 #include <pcap.h>
 #include <pcap/pcap.h>
@@ -76,7 +76,9 @@ private slots:
 
     void paintEvent(QPaintEvent* event);
 
-    int return_RSSI(char *filename, char* mac_add);
+    int return_RSSI(const char *filename);
+
+    void on_enterButton_clicked();
 
 private:
     Ui::MainWindow *ui;

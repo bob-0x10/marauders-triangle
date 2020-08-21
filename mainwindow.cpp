@@ -81,14 +81,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-int MainWindow::return_RSSI(char* filename, char* mac_add){
+int MainWindow::return_RSSI(const char* filename){
     char error_buffer[PCAP_ERRBUF_SIZE];
     pcap_t *handle = pcap_open_offline(filename, error_buffer);
     char *device; //= "enp0s3";
     int total_packet_count = -1;
     u_char *my_arguments = NULL;
     device = pcap_lookupdev(error_buffer);
-
+    /*
     char *str = mac_add;
     char t[4];
 
@@ -97,7 +97,7 @@ int MainWindow::return_RSSI(char* filename, char* mac_add){
         t[3] = '\0';
         *(my_mac +i) = (uint8_t)strtoul(t, NULL, 16);
     }
-
+    */
     pcap_loop(handle, total_packet_count, my_packet_handler, my_arguments);
 
     int temp;
@@ -176,4 +176,43 @@ void MainWindow::paintEvent(QPaintEvent* event)
 void MainWindow::on_enterButton_clicked()
 {
     //main logic
+    QString mac_temp = ui->macAddress->toPlainText();
+    unsigned int a, b, c, d, e, f;
+    int res = sscanf(mac_temp.toStdString().c_str(), "%02X:%02X:%02X:%02X:%02X:%02X", &a, &b, &c, &d, &e, &f);
+    my_mac[0] = a;
+    my_mac[1] = b;
+    my_mac[2] = c;
+    my_mac[3] = d;
+    my_mac[4] = e;
+    my_mac[5] = f;
+    QString path1=ui->pcapPath_1->toPlainText();
+    QString path2=ui->pcapPath_2->toPlainText();
+    QString path3=ui->pcapPath_3->toPlainText();
+    const char* p1 = path1.toStdString().c_str();
+    const char* p2 = path2.toStdString().c_str();
+    const char* p3 = path3.toStdString().c_str();
+    int r1=return_RSSI(p1);
+    int r2=return_RSSI(p2);
+    int r3=return_RSSI(p3);
+    packet_info pckt1,pckt2,pckt3;
+    pckt1.RSSI=r1;
+    pckt1.anthenaLoction.xPos=0;
+    pckt1.anthenaLoction.yPos=0;
+    pckt2.RSSI=r2;
+    pckt2.anthenaLoction.xPos=200;
+    pckt2.anthenaLoction.yPos=0;
+    pckt3.RSSI=r3;
+    pckt3.anthenaLoction.xPos=100;
+    pckt3.anthenaLoction.yPos=170;
+    double disA, disB, disC;
+    disA = CalculateDistance(pckt1, 2);
+    disB = CalculateDistance(pckt2, 2);
+    disC = CalculateDistance(pckt3, 2);
+    struct pos resultLocation = CalculateLocation(disA, disB, disC, 3);
+    MainWindow::xValue=resultLocation.xPos;
+    MainWindow::yValue=resultLocation.yPos;
+    int diff=abs(pckt2.anthenaLoction.xPos-pckt1.anthenaLoction.xPos);
+    MainWindow::boundValue=CalculateRadius(disA, disB, disC, diff,resultLocation);
+
+    MainWindow::update();
 }
