@@ -180,7 +180,7 @@ void MainWindow::on_enterButton_clicked()
     int diff=abs(pckt2.anthenaLoction.xPos-pckt1.anthenaLoction.xPos);
     boundValue=CalculateRadius(disA, disB, disC, diff,resultLocation);
 
-    sleep(3);
+    sleep(0.3);
 
     ui->enterButton->setEnabled(true);
     ui->enterButton->repaint();
