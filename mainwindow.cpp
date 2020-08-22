@@ -87,8 +87,11 @@ void MainWindow::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
 
-    xPosition = 10  + xValue + xCorrection;
-    yPosition = 490 - yValue + yCorrection;
+    xPosition = 10  + (xValue + xCorrection);
+    yPosition = 490 - (yValue + yCorrection);
+
+    ui->xAxisLcd->display(xValue + xCorrection);
+    ui->yAxisLcd->display(yValue + yCorrection);
 
     QPainter painter;
     painter.begin(this);
