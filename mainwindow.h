@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <wchar.h>
 #include <math.h>
+#include <unistd.h>
 #define TX_POWER -82
 
 QT_BEGIN_NAMESPACE
@@ -69,7 +70,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    int xValue{0}, yValue{0}, xPosition{0}, yPosition{0}, boundValue{0};
+    int xValue{0}, yValue{0}, xPosition{0}, yPosition{0}, boundValue{0}, xCorrection{0}, yCorrection{0};
 
 private slots:
     void reset_variables();
@@ -79,6 +80,10 @@ private slots:
     int return_RSSI(const char *filename);
 
     void on_enterButton_clicked();
+
+    void on_xAxisCorrectionSlidebar_valueChanged(int value);
+
+    void on_yAxisCorrectionSlidebar_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;

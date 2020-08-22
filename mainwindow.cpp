@@ -13,7 +13,7 @@ char filename;
 char mac_add;
 char pwr;
 uint8_t my_mac[6];
-int pwr_arr[20];
+int pwr_arr[1024];
 int k = 0;
 
 static void my_packet_handler(u_char *args, const struct pcap_pkthdr *header, const u_char *packet) {
@@ -60,13 +60,13 @@ double CalculateRadius(double disA, double disB, double disC, double disBetween,
     p3.xPos = disBetween / (double)2;
     p3.yPos = p3.xPos * 1.7;
     double len1, len2, len3;
-    len1 = abs(DistanceBetween(p1, target_loc) - disA);
-    len2 = abs(DistanceBetween(p2, target_loc) - disB);
-    len3 = abs(DistanceBetween(p3, target_loc) - disC);
-    double max = (len1 > len2) ? ((len1 > len3) ? len1 : len3)
-                               : ((len2 > len3) ? len2 : len3);
-    return max;
+    len1 = DistanceBetween(p1, target_loc) - disA;
+    len2 = DistanceBetween(p2, target_loc) - disB;
+    len3 = DistanceBetween(p3, target_loc) - disC;
 
+    int avg = (len1+len2+len3)/3;
+
+    return (0 < avg) ? avg : 0;
 }
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -84,7 +84,7 @@ MainWindow::~MainWindow()
 int MainWindow::return_RSSI(const char* filename){
     char error_buffer[PCAP_ERRBUF_SIZE];
     pcap_t *handle = pcap_open_offline(filename, error_buffer);
-    char *device = "wlan0";
+    char *device = "enp0s3";
     int total_packet_count = -1;
     u_char *my_arguments = NULL;
     device = pcap_lookupdev(error_buffer);
@@ -125,6 +125,9 @@ void MainWindow::reset_variables()
     yPosition=0;
     boundValue=1;
 
+    xCorrection=0;
+    yCorrection=0;
+
     MainWindow::update();
 }
 
@@ -132,8 +135,8 @@ void MainWindow::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
 
-    xPosition = 10  + xValue;
-    yPosition = 490 - yValue;
+    xPosition = 10  + xValue + xCorrection;
+    yPosition = 490 - yValue + yCorrection;
 
     QPainter painter;
     painter.begin(this);
@@ -175,7 +178,9 @@ void MainWindow::paintEvent(QPaintEvent* event)
 
 void MainWindow::on_enterButton_clicked()
 {
-    //main logic
+    ui->enterButton->setEnabled(false);
+    ui->enterButton->repaint();
+
     QString mac_temp = ui->macAddress->toPlainText();
     unsigned int a, b, c, d, e, f;
     int res = sscanf(mac_temp.toStdString().c_str(), "%02X:%02X:%02X:%02X:%02X:%02X", &a, &b, &c, &d, &e, &f);
@@ -219,5 +224,24 @@ void MainWindow::on_enterButton_clicked()
     yValue=resultLocation.yPos*150+42;
     int diff=abs(pckt2.anthenaLoction.xPos-pckt1.anthenaLoction.xPos);
     boundValue=CalculateRadius(disA, disB, disC, diff,resultLocation);
+
+    sleep(3);
+
+    ui->enterButton->setEnabled(true);
+    ui->enterButton->repaint();
+    MainWindow::update();
+}
+
+void MainWindow::on_xAxisCorrectionSlidebar_valueChanged(int value)
+{
+    xCorrection = value;
+
+    MainWindow::update();
+}
+
+void MainWindow::on_yAxisCorrectionSlidebar_valueChanged(int value)
+{
+    yCorrection = value;
+
     MainWindow::update();
 }
